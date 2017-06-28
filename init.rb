@@ -1,9 +1,9 @@
 Redmine::Plugin.register :redmine_include_macro_extension do
  name 'Include macro extension plugin'
- author 'Taiki I'
- description 'This plugin makes possible include wiki section.'
- version '0.0.2'
- url 'https://github.com/taikii/redmine_include_macro_extension'
+ author 'Stephane Briand'
+ description 'This plugin makes possible include wiki section. And it also provide icons to directly view or edit included wiki page. Original author is Taiki I.'
+ version '0.0.3'
+ url 'https://github.com/sbriand/redmine_include_macro_extension'
  author_url 'https://github.com/taikii'
  
  Redmine::WikiFormatting::Macros.register do
@@ -54,8 +54,19 @@ Redmine::Plugin.register :redmine_include_macro_extension do
           @included_wiki_pages.pop
         end
       end
-      
-      out
+
+      content_tag('div',
+                  link_to(l(:button_view), project_wiki_page_path(page.project, page.title),
+                          :class => 'icon-only icon-magnifier'),
+                  :class => "contextual",
+                  :title => l(:button_view),
+                  :id => "view-#{page.title}") +
+      content_tag('div',
+                  link_to(l(:button_edit), project_wiki_page_path(page.project, page.title) + '/edit',
+                          :class => 'icon-only icon-edit'),
+                  :class => "contextual",
+                  :title => l(:button_edit),
+                  :id => "edit-#{page.title}") + out.html_safe
     end
  end
 end
